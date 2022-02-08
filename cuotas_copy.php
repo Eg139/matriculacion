@@ -16,7 +16,7 @@ include("includes/header.php");
 include("db.php");
 
 
-$query = mysqli_query($prueba, "SELECT sid, s_fname,s_lname,s_rollno,reg_cuota from wp_wpsp_student");
+$query = mysqli_query($prueba, "SELECT sid, s_fname,s_lname,s_rollno from wp_wpsp_student");
 
 
     
@@ -111,11 +111,10 @@ $resCuotas = $prueba->query($alumnos);*/
                         <option value="">Alumno</option>
                         <?php
                         while ($datos = mysqli_fetch_array($query)) {
-                            if($datos['reg_cuota']==1){
                         ?>
+
                             <option value="<?php echo $datos['s_fname'] ?>"><?php echo $datos['s_rollno'] . " " . $datos['s_fname'] . " " . $datos['s_lname']  ?></option>
                         <?php
-                            }
                         }
                         $name = $datos['s_fname'];
                         $lastname = $datos['s_lname'];
@@ -127,19 +126,19 @@ $resCuotas = $prueba->query($alumnos);*/
 
                 <div class="form-group col">
                     <select class="form-select" name="cuota">
-                    <option value="">Mes</option>
-                        <option value="Matricula">Matricula</option>
-                        <option value="Materiales">Materiales</option>
+                        <option value="">Mes</option>
+                        <option value="enero">Enero</option>
                         <option value="febrero">Febrero</option>
-                        <option value="marzo">Marzo</option>
-                        <option value="abril">Abril</option>
-                        <option value="mayo">Mayo</option>
-                        <option value="junio">Junio</option>
-                        <option value="julio">Julio</option>
-                        <option value="agosto">Agosto</option>
-                        <option value="septiembre">Septiembre</option>
-                        <option value="octubre">Octubre</option>
-                        <option value="noviembre">Noviembre</option>
+                        <option value="marzo">marzo</option>
+                        <option value="abril">abril</option>
+                        <option value="mayo">mayo</option>
+                        <option value="junio">junio</option>
+                        <option value="julio">julio</option>
+                        <option value="agosto">agosto</option>
+                        <option value="septiembre">septiembre</option>
+                        <option value="octubre">octubre</option>
+                        <option value="noviembre">noviembre</option>
+                        <option value="diciembre">diciembre</option>
                     </select>
 
                 </div>
@@ -153,7 +152,6 @@ $resCuotas = $prueba->query($alumnos);*/
                     </select>
 
                 </div>
-
 
                 <div class="col">
                     <button type="submit" class="btn btn-success btn-block" name="filtro" id="filtro">Filtrar</button>
@@ -185,7 +183,6 @@ echo $stat."<br>";
                         <th scope="col">Estado</th>
                         <th scope="col">Importe</th>
                         <th scope="col">Acciones</th>
-                        <th scope="col">Pagos Multiples</th>
                     </thead>
                     <tbody>
                         <?php
@@ -211,7 +208,6 @@ echo $stat."<br>";
 
                         $valor_cuota_total = 0;
                         $color = "";
-                        $checkArray = [];
 
                         $query = "SELECT s_rollno, s_fname, s_lname,
                         Cuot.id,Cuot.mes,Cuot.valor,Cuot.estado,Cuot.descuento,Cuot.id_alumno,Cuot.fecha_vencimiento,
@@ -240,31 +236,26 @@ echo $stat."<br>";
 
                             echo '
             
-                                <tr>
-                                    <td>' . $fila['s_rollno'] . '</td>
-                                    <td>' . $fila['s_fname'] .' '. $fila['s_lname'] . '</td>
-                                    <td>' . $fila['mes'] . '</td>
-                                    <td>' . $fila['descuento'] . '%</td>
-                                    <td>' . $fila['fecha_vencimiento'] . '</td>
-                                    <td style="color:'.$color.'; font-weight:bold;">' . $estado . '</td>
-                                    <td>' . $valor_cuota_total . '</td>
-                                    <td>
-                                    <a class="btn btn-success" id="btnPagar'.$fila['id'].'" onclick="openPay('.$fila['id'].','.$fila['estado'].','.$fila['id_alumno'].')" title="Pagar cuota"><i class="bi bi-cash-coin"></i></a>
-                                    <a class="btn btn-info" id="btnEditarPago'.$fila['id'].'" onclick="openEdit('.$fila['id'].','.$fila['estado'].','.$fila['id_alumno'].')" title="Editar cuota"><i class="bi bi-pencil-fill"></i></a>
-                                    <a class="btn btn-secondary" onclick="printCuota('.$fila['id'].','.$fila['id_alumno'].','.$fila['estado'].')" title="Imprimir comprobante"><i class="bi bi-printer"></i></a>
-                                    <a class="btn btn-danger id="btnCancelarPago'.$fila['id'].'" onclick="openCancel('.$fila['id'].','.$fila['estado'].','.$fila['id_alumno'].')" title="Cancelar pago"><i class="bi bi-trash"></i></a>
-                                    </td>
-                                    <td><input class="form-check-input" type="checkbox" value="" id="check'.$fila['id'].'"></td>
-                                </tr>
+                <tr>
+                    <td>' . $fila['s_rollno'] . '</td>
+                    <td>' . $fila['s_fname'] .' '. $fila['s_lname'] . '</td>
+                    <td>' . $fila['mes'] . '</td>
+                    <td>' . $fila['descuento'] . '</td>
+                    <td>' . $fila['fecha_vencimiento'] . '</td>
+                    <td style="color:'.$color.'; font-weight:bold;">' . $estado . '</td>
+                    <td>' . $valor_cuota_total . '</td>
+                    <td>
+                    <a class="btn btn-success" id="btnPagar'.$fila['id'].'" onclick="openPay('.$fila['id'].','.$fila['estado'].','.$fila['id_alumno'].')"><i class="bi bi-cash-coin"></i></a>
+                    <a class="btn btn-info" onclick="editCuota('.$fila['id'].','.$fila['id_alumno'].','.$fila['estado'].')"><i class="bi bi-pencil-fill"></i></a>
+                    <a class="btn btn-secondary" onclick="printCuota('.$fila['id'].','.$fila['id_alumno'].','.$fila['estado'].')"><i class="bi bi-printer"></i></a>
+                    </td>
+                </tr>
             
             
-                            ';
-
-                            $valor_cuota_total = 0;
-                            $color = "";
-                            array_push ($checkArray , 'check'.$fila['id']);
+            ';
+            $valor_cuota_total = 0;
+            $color = "";
                         }
-
                         echo '
                         <td></td>
                         <td></td>
@@ -273,7 +264,6 @@ echo $stat."<br>";
                         <td></td>
                         <td>Total: </td>
                         <td>' . $acumulador . '</td>
-                        <button class="btn btn-success mr-2" id="pagoMasivo" style="position: relative;right:-1280px;" title="Pagar cuotas seleccionadas"><i class="bi bi-cash-coin"></i> Registrar Pagos</button>
                         
                         
                         
@@ -290,31 +280,6 @@ echo $stat."<br>";
     </div>
 </div>
 
-<!-- Modal de Confirmar editar -->
-<div class="modal fade" id="confirmEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Cancelar Pago de cuota</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="edit.php" method="POST">
-        <div class="modal-body">
-
-            <h5>¿Seguro que desea modificar el alumno?</h5></br>
-            
-            <input type="text" name="idEdit" id="idEdit" value="" hidden>
-            <input type="number" name="idAlumnoEdit" id="idAlumnoEdit" value="" hidden>
-
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-            <input type="submit" class="btn btn-success" id="enviar" value="Confirmar">
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
 
 <!-- Modal de Confirmar Pago -->
 <div class="modal fade" id="confirmPayModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -324,7 +289,7 @@ echo $stat."<br>";
         <h5 class="modal-title" id="exampleModalLabel">Registrar Pago de cuota</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="confirmaPay.php" method="POST">
+      <form action="confirmaPay_copy.php" method="POST">
         <div class="modal-body">
 
             <h5>¿Confirma el pago de la cuota?</h5></br>
@@ -339,31 +304,6 @@ echo $stat."<br>";
             <input type="submit" class="btn btn-success" id="enviar" value="Confirmar">
         </div>
       </form>
-    </div>
-  </div>
-</div>
-
-<!-- Modal de Confirmar Pago Masivo -->
-<div class="modal fade" id="confirmMasivePayModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Registrar Pago de cuota</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-        <div class="modal-body">
-
-            <h5>¿Confirma el pago de la cuota?</h5></br>
-            <h6>Se enviará un mail de aviso al alumno y al administrador del colegio</h6></br>
-            
-            <input type="text" name="idPagar" id="idPagar" value="" hidden>
-            <input type="number" name="idAlumno" id="idAlumno" value="" hidden>
-
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-success" id="pagoMasivoConfirm">Confirmar</button>
-        </div>
     </div>
   </div>
 </div>
@@ -379,51 +319,6 @@ echo $stat."<br>";
       <div class="modal-body">
         <h5 id="mensaje"></h5></br>
       </div>
-      <div class="modal-footer" id="modalFooter">
-        
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal de Confirmar cancelacion de cuota -->
-<div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Cancelar Pago de cuota</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="delete_alumnos.php" method="POST">
-        <div class="modal-body">
-
-            <h5>¿Confirma la cancelacion de la cuota?</h5></br>
-            
-            <input type="text" name="idCancel" id="idCancel" value="" hidden>
-            <input type="number" name="idAlumno" id="idAlumno" value="" hidden>
-
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-            <input type="submit" class="btn btn-success" id="enviar" value="Confirmar">
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-<!-- Modal Cuota sin pagar -->
-<div class="modal fade" id="cuotaSinPagadaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Cuota Sin Abonar</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <h5>Esta cuota no ha sido abonada con anterioridad</h5></br>
-      </div>
       <div class="modal-footer">
         
       </div>
@@ -433,78 +328,6 @@ echo $stat."<br>";
 
 
 <script>
-$(document).ready(function() {
-    $('#alumnos').select2();
-});
-
-$(document).ready(function() {
-    $('.js-example-basic-multiple').select2();
-});
-
-function openCancel(idCancel, estado, idAlumno){
-    if(estado==0 || estado == -1){
-        $("#cuotaSinPagadaModal").modal("show");
-    }else{ 
-        $("#confirmCancelModal").modal("show");
-        $("#idCancel").attr("value",idCancel);
-        $("#idAlumno").attr("value",idAlumno);
-    }
-}
-
-function openEdit(idEdit, estado, idAlumno){
-
-        $("#confirmEditModal").modal("show");
-        $("#idEdit").attr("value",idEdit);
-        $("#idAlumnoEdit").attr("value",idAlumno);
-}
-
-var checkArray = <?php echo json_encode($checkArray);?>;
-
-$("#pagoMasivoConfirm").click(function(){
-    
-    //document.getElementById('loader').classList.remove("hidden");
-
-    var checkBoxSelected = [];
-    for(var i=0;i<checkArray.length;i++){
-        if(document.getElementById(checkArray[i]).checked){
-            var idCuota =checkArray[i].replace("check", "");
-            checkBoxSelected.push(idCuota);
-        }
-    }
-
-    $.ajax({
-    method: "POST",
-    url: "pagoMasivo.php",
-    data: { arrayChecks: checkBoxSelected },
-    success: function(response) {
-            console.log(response);
-            $("#confirmMasivePayModal").modal("hide");
-            location.href='cuotas.php';
-            $("#mensajeModal").modal("show");
-            $("#mensajeModalLabel").html("Cuota Abonada con exito");
-            $("#mensaje").html("Los pagos se registraron con EXITO");
-            //document.getElementById('loader').classList.add('hidden');
-            /*if(response==="exito"){
-                $("#mensajeModal").modal("show");
-                $("#mensajeModalLabel").html("Cuota Abonada con exito");
-                $("#mensaje").html("Los pagos se registraron con EXITO");
-            }else{
-                $("#mensajeModal").modal("show");
-                $("#mensajeModalLabel").html("Cuotas NO Abonadas");
-                $("#mensaje").html("Los pagos NO SE REGISTRARON");
-            }*/
-        }
-    });
-
-});
-
-//Pago masivo
-$("#pagoMasivo").click(function(){
-    //Mostrar Popup
-    $("#confirmMasivePayModal").modal("show");
-});
-
-
 
 function openPay(idPagar, estado, idAlumno){
     if(estado==1){
@@ -542,7 +365,7 @@ function editCuota(idCuota, idAlumno, estado){
 
 jQuery(document).ready(function($){
     $(document).ready(function() {
-        //$('#alumno').select2();
+        $('#alumno').select2();
     });
 });
 </script>

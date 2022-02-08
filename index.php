@@ -1,16 +1,26 @@
 <?php
+
+require_once($_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+
+////////////////////////////////// COMPROBAR LOGIN
+$user = wp_get_current_user();
+$current_user_role = $user->roles[0];
+
+if ($user->ID != 0 or $user->ID != null) {
+    if ($current_user_role == 'administrator') {
+      
+
 include("includes/header.php");
 include("db.php");
+
 $query=mysqli_query($prueba, "SELECT sid, s_fname,s_lname,s_rollno from wp_wpsp_student");
 
 ?>
 
 <div class="container">
-    <div style="  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 80vh;">
-        <div class="card mb-3" style="max-width: 540px;">
+    <div class="row mt-4">
+    <div class="col-md-6 mx-auto p-4">
+        <div class="card">
   <div class="row g-0">
     <div class="col-md-4">
       <img src="includes/logo.png" class="img-fluid rounded-start" alt="...">
@@ -24,7 +34,7 @@ $query=mysqli_query($prueba, "SELECT sid, s_fname,s_lname,s_rollno from wp_wpsp_
   </div>
 </div>
     </div>
-
+    </div>
 
 </div>
 
@@ -33,4 +43,13 @@ $query=mysqli_query($prueba, "SELECT sid, s_fname,s_lname,s_rollno from wp_wpsp_
 
 <?php
 include("includes/footer.php");
+
+}else{
+  echo "El usuario no es administrador";
+  }
+}else{
+  echo "El usuario no está registrado<br></br>";
+  echo "Por favor ingresar como Administrador: ";
+  include_once($_SERVER['DOCUMENT_ROOT'] . '/wp-content/plugins/wpschoolpress/includes/wpsp-login.php');
+}
 ?>

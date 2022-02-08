@@ -1,0 +1,20 @@
+footer{
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    height: 5vh;
+    width: 100%;
+    opacity: 70%;
+    color: white;
+    
+  }
+  .nav{
+    background: rgb(82, 185, 216)!important;
+  }
+  .home{
+    background-image:url(includes/logo.png);
+  }
+  body{
+      padding-bottom: 2em;
+      min-height: 95vh;
+  }
